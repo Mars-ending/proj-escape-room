@@ -1,0 +1,102 @@
+/* style.css - 终极修复版 */
+
+/* 1. 强制铺满屏幕，禁止滚动 */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* 核心：杀掉滚动条 */
+    background-color: #000;
+    font-family: 'Roboto', sans-serif;
+    color: white;
+}
+
+/* 2. 3D 画布：绝对定位，占满全屏，放在底层 (z-index: 1) */
+#canvas-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    display: block; /* 防止 canvas 产生额外的底部间隙 */
+}
+
+/* 3. UI 容器：绝对定位，占满全屏，盖在上面 (z-index: 2) */
+#ui-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none; /* 让鼠标点击穿透空白处 */
+    
+    /* 使用 Flexbox 强制让内容居中 */
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    align-items: center;     /* 垂直居中 */
+}
+
+/* 4. 幻灯片卡片：默认隐藏 */
+.slide-content {
+    position: absolute; /* 关键：让所有卡片脱离文档流，叠在一起 */
+    opacity: 0;
+    visibility: hidden; /* 彻底隐藏，不占位 */
+    transition: all 0.5s ease-in-out;
+    transform: translateY(20px);
+    
+    /* 卡片样式 */
+    background: rgba(10, 20, 30, 0.85); /* 深色背景 */
+    backdrop-filter: blur(10px);        /* 毛玻璃 */
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 210, 255, 0.3);
+    padding: 40px;
+    border-radius: 15px;
+    width: 60%;         
+    max-width: 700px;
+    
+    pointer-events: auto; /* 开启卡片上的点击交互 */
+    text-align: left;
+}
+
+/* 5. 激活状态：显示 */
+.slide-content.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    z-index: 10;
+}
+
+/* --- 以下是美化文字的样式 --- */
+h1 { margin: 0 0 10px 0; color: #00d2ff; text-transform: uppercase; font-size: 3em; }
+h2 { margin: 0 0 20px 0; color: #ffae00; border-bottom: 1px solid #555; padding-bottom: 10px; }
+p { color: #ddd; line-height: 1.6; font-size: 1.1em; }
+ul { color: #ccc; line-height: 1.8; }
+.highlight-blue { color: #00d2ff; font-weight: bold; }
+.highlight-red { color: #ff4d4d; font-weight: bold; }
+
+/* 左右点击区域 (隐形按钮) */
+.nav-area {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 10%;
+    z-index: 20;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto; /* 必须开启 */
+}
+.prev-area { left: 0; }
+.next-area { right: 0; }
+
+.arrow {
+    font-size: 4em;
+    color: rgba(255,255,255,0.2);
+    user-select: none;
+    transition: 0.3s;
+}
+.nav-area:hover .arrow { color: #00d2ff; transform: scale(1.2); }
